@@ -54,7 +54,7 @@ public class Engine {
 
     public void renderWorld() {
         ter.initialize(WIDTH, HEIGHT);
-        ter.renderFrame(interactWithInputString(null));
+        ter.renderFrame(interactWithInputString("hello"));
     }
 
     public static void main(String[] args) {
