@@ -33,8 +33,7 @@ public class RoomMaker {
 
 
     private void makeRooms() {
-        return;
-        /*Random seedRandom = new Random(seed);
+        Random seedRandom = new Random(seed);
         int noOfRooms = RandomUtils.uniform(seedRandom, 10, 20);
         int k = 0;
 
@@ -43,24 +42,24 @@ public class RoomMaker {
             int startingRow = RandomUtils.uniform(seedRandom, height);
             int startingColumn = RandomUtils.uniform(seedRandom, width);
 
-            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height-startingRow);
-            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width-startingColumn);
+            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height - startingRow);
+            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width - startingColumn);
 
 
-            System.out.println(startingRow +", " + startingColumn + ", " + heightOfRoom + ", " + widthOfRoom);
+            System.out.println(startingRow + ", " + startingColumn + ", " + heightOfRoom + ", " + widthOfRoom);
 
 
             boolean isEmpty = true;
 
             for (int i = startingRow; i < startingRow + height; i++) {
                 for (int j = startingColumn; j < startingColumn + width; j++) {
-                    if(!world[i][j].equals(Tileset.NOTHING)) {
+                    if (!world[i][j].equals(Tileset.NOTHING)) {
                         isEmpty = false;
                     }
                 }
             }
 
-            if(isEmpty) {
+            if (isEmpty) {
                 for (int i = startingRow; i < startingRow + height; i++) {
                     for (int j = startingColumn; j < startingColumn + width; j++) {
                         world[i][j] = Tileset.SAND;
@@ -69,8 +68,6 @@ public class RoomMaker {
                 k++;
             }
         }
-        */
-
     }
 
 
