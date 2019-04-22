@@ -1,0 +1,29 @@
+Q: Can you think of an analogy between the process of tesselating hexagons and randomly generating a world using rooms and hallways? 
+What is the hexagon and what is the tesselation on the Project 3 side?
+
+A: The side length could be considered equivalent to the seed on the project 3 side because using the same seed or the same side length should always give you the same output. A hexagon could be considered a room since it is filled with tiles and the surrounding bits are Tile.NOTHING
+
+-----
+Q: If you were to start working on world generation, what kind of method would you think of writing first? 
+Think back to the lab and the process used to eventually get to tesselating hexagons.
+
+A: Before focusing on the random generation based on seeds, etc. I'd just want to build basic methods that construct rooms/hallways based on given parameters just so I know that my tile generation is working properly
+
+-----
+Q: What distinguishes a hallway from a room? How are they similar?
+
+A: A hallway has width 1, a room will have a greater width, rooms are connected through hallways (can be multiple).
+
+-----
+Q: For tesselating hexagons, one of the hardest parts is figuring out where to place each hexagon/how to easily place hexagons on screen in an algorithmic way. 
+After looking at your own implemention, consider the implementation provided near the end of the lab. 
+How did your implementation differ from the given one? What lessons can be learned from it?
+
+A: I also tried to think about bottom left and top right positions as a way of joining the hexagons but the lab solution taught me that I can break down the world into columns that can then be populated with the hexagons. It basically taught me that I can think of the interaction between the spaces in the world and the structure that I'm building and the different ways that I can fit structures like rooms or hexagons into that space. 
+
+-----
+Q: Consider an algorithm for placing rooms and hallways on your map. 
+Ideally, consider many algorithms and think about what makes some easier or harder to implement. Try and bring those ideas together into a single simple algorithm which accomplishes the task. 
+In general, algorithms with as few edge cases as possible are better algorithms.
+
+A:I would first want to create different rooms of different side lengths (2, 3, 4, etc.) and then the algorithm should calculate the total area of the space and divide it into strips or columns. Each column, similarly to the lab implementation, should calculate the rooms that it can fit in and the number of small rooms vs big rooms can be dependent on the seed number. The empty spaces near the smaller rooms can then be filled in with the hallways by look at the spaces that are TileSet.NOTHING. Although this algorithm is not very detailed right now, I think it would be a good starting place.
