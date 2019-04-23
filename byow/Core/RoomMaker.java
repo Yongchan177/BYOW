@@ -46,14 +46,16 @@ public class RoomMaker {
         return world;
     }
 
-    /** makeRooms: uses random seed to generate rooms in the 2D world */
+    /** makeRooms: uses random seed to generate rooms in the 2D world
+     * Notes:
+     *      1. Unique seeds must return unique rooms
+     *      2. Identical seeds must return the same room */
     private void makeRooms() {
         Random seedRandom = new Random(seed);
         int noOfRooms = RandomUtils.uniform(seedRandom, 5, 10);
         int k = 0;
 
         while (k < noOfRooms) {
-
             //Get random starting points based on the seed
             int startingRow = RandomUtils.uniform(seedRandom, height);
             int startingColumn = RandomUtils.uniform(seedRandom, width);
@@ -79,20 +81,18 @@ public class RoomMaker {
                     }
                 }
                 k++;
-                Point topRight = new Point((double) startingRow, (double) startingColumn+widthOfRoom);
+                Point topRight = new Point((double) startingRow, (double) startingColumn + widthOfRoom);
                 roomCorners.add(topRight);
             }
         }
     }
 
 
-    /** makeHallways: connects rooms together randomly */
+    /** makeHallways: connects rooms together randomly using a KD tree's closest method */
     private void makeHallways() {
         closestFinder = new KDTree(roomCorners);
         for (Point roomCorner: roomCorners) {
-
             Point closest = closestFinder.nearest(roomCorner.getX(), roomCorner.getY());
-
         }
     }
 
