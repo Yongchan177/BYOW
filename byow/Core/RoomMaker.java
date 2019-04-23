@@ -33,12 +33,12 @@ public class RoomMaker {
         //Initializes all the tiles in the world
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                world[x][y] = Tileset.WALL;
+                world[x][y] = Tileset.NOTHING;
             }
         }
 
         //Create randomly generated rooms within the world
-       // makeRooms();
+       makeRooms();
     }
 
     /** getWorld: Returns world 2D Array */
@@ -46,12 +46,10 @@ public class RoomMaker {
         return world;
     }
 
-
     /** makeRooms: uses random seed to generate rooms in the 2D world */
     private void makeRooms() {
-        /*
         Random seedRandom = new Random(seed);
-        int noOfRooms = RandomUtils.uniform(seedRandom, 10, 20);
+        int noOfRooms = RandomUtils.uniform(seedRandom, 5, 10);
         int k = 0;
 
         while (k < noOfRooms) {
@@ -59,9 +57,8 @@ public class RoomMaker {
             //Get random starting points based on the seed
             int startingRow = RandomUtils.uniform(seedRandom, height);
             int startingColumn = RandomUtils.uniform(seedRandom, width);
-            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height-startingRow);
-            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width-startingColumn);
-
+            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height - startingRow);
+            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width - startingColumn);
 
             boolean isEmpty = true;
 
@@ -86,14 +83,13 @@ public class RoomMaker {
                 roomCorners.add(topRight);
             }
         }
-        */
     }
 
 
     /** makeHallways: connects rooms together randomly */
     private void makeHallways() {
         closestFinder = new KDTree(roomCorners);
-        for(Point roomCorner: roomCorners) {
+        for (Point roomCorner: roomCorners) {
 
             Point closest = closestFinder.nearest(roomCorner.getX(), roomCorner.getY());
 
