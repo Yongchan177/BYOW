@@ -1,74 +1,105 @@
 package byow.Core;
 
+import byow.KdTree.KDTree;
+import byow.KdTree.Point;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class RoomMaker {
+    /** Class will create rooms based on specified width and heights. Referenced in Engine.java */
 
+    /** Instance Variables */
     private int width;
     private int height;
     private int seed;
     private TETile[][] world;
+    private ArrayList<Point> roomCorners;
+    private KDTree closestFinder;
 
+
+    /** Constructor: Initializes instance variables and instantiates 2D world Array. */
     public RoomMaker(int width, int height, int seed) {
-        this.width = width;
-        this.height = height;
+
+        //Setting instance variables
+        this.width = width; //number of columns
+        this.height = height; //number of rows
         this.seed = seed;
-        world = new TETile[height][width];
+        world = new TETile[width][height];
+        roomCorners = new ArrayList<>();
+
         //Initializes all the tiles in the world
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                world[i][j] = Tileset.FLOWER;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                world[x][y] = Tileset.WALL;
             }
         }
-        makeRooms();
+
+        //Create randomly generated rooms within the world
+       // makeRooms();
     }
 
-
+    /** getWorld: Returns world 2D Array */
     public TETile[][] getWorld() {
         return world;
     }
 
 
+    /** makeRooms: uses random seed to generate rooms in the 2D world */
     private void makeRooms() {
+        /*
         Random seedRandom = new Random(seed);
         int noOfRooms = RandomUtils.uniform(seedRandom, 10, 20);
         int k = 0;
 
-        while(k < noOfRooms) {
+        while (k < noOfRooms) {
 
+            //Get random starting points based on the seed
             int startingRow = RandomUtils.uniform(seedRandom, height);
             int startingColumn = RandomUtils.uniform(seedRandom, width);
-
-            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height - startingRow);
-            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width - startingColumn);
-
-
-            System.out.println(startingRow + ", " + startingColumn + ", " + heightOfRoom + ", " + widthOfRoom);
+            int heightOfRoom = RandomUtils.uniform(seedRandom, 2, height-startingRow);
+            int widthOfRoom = RandomUtils.uniform(seedRandom, 2, width-startingColumn);
 
 
             boolean isEmpty = true;
 
-            for (int i = startingRow; i < startingRow + height; i++) {
-                for (int j = startingColumn; j < startingColumn + width; j++) {
-                    if (!world[i][j].equals(Tileset.NOTHING)) {
+            //Check if room already exists at the position
+            for (int i = startingRow; i < startingRow + heightOfRoom; i++) {
+                for (int j = startingColumn; j < startingColumn + widthOfRoom; j++) {
+                    if(!world[i][j].equals(Tileset.NOTHING)) {
                         isEmpty = false;
                     }
                 }
             }
 
-            if (isEmpty) {
-                for (int i = startingRow; i < startingRow + height; i++) {
-                    for (int j = startingColumn; j < startingColumn + width; j++) {
+            //Create the room
+            if(isEmpty) {
+                for (int i = startingRow; i < startingRow + heightOfRoom; i++) {
+                    for (int j = startingColumn; j < startingColumn + widthOfRoom; j++) {
                         world[i][j] = Tileset.SAND;
                     }
                 }
                 k++;
+                Point topRight = new Point((double) startingRow, (double) startingColumn+widthOfRoom);
+                roomCorners.add(topRight);
             }
         }
+        */
     }
+
+
+    /** makeHallways: connects rooms together randomly */
+    private void makeHallways() {
+        closestFinder = new KDTree(roomCorners);
+        for(Point roomCorner: roomCorners) {
+
+            Point closest = closestFinder.nearest(roomCorner.getX(), roomCorner.getY());
+
+        }
+    }
+
 
 
 
