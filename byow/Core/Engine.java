@@ -6,8 +6,8 @@ import byow.TileEngine.TETile;
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
+    public static final int WIDTH = 60;
+    public static final int HEIGHT = 60;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -47,7 +47,7 @@ public class Engine {
         // that works for many different input types.
 
 
-        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, 316);
+        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, 1);
         TETile[][] finalWorldFrame = worldMaker.getWorld();
         return finalWorldFrame;
     }
