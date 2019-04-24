@@ -100,8 +100,12 @@ public class RoomMaker {
                 }
 
                 k++;
-                Point topRight = new Point((double) endingColumn - 1, (double) endingRow - 1);
-                roomCorners.add(topRight);
+
+                int midX = startingColumn + Math.floorDiv((endingColumn - startingColumn), 2);
+                int midY = startingRow + Math.floorDiv((endingRow - startingRow), 2);
+
+                Point midPoint = new Point((double) midX, (double) midY);
+                roomCorners.add(midPoint);
             }
         }
     }
@@ -112,33 +116,37 @@ public class RoomMaker {
 
         for (Point roomCorner : roomCorners) {
 
-            int random = RandomUtils.uniform(seedRandom, 0, roomCorners.size() - 1);
-            Point randomPoint = roomCorners.get(random);
+            for(int k = 0; k < 3; k++) {
 
-            int myX = (int) roomCorner.getX();
-            int myY = (int) roomCorner.getY();
+                int random = RandomUtils.uniform(seedRandom, 0, roomCorners.size() - 1);
+                Point randomPoint = roomCorners.get(random);
 
-            int randomX = (int) randomPoint.getX();
-            int randomY = (int) randomPoint.getY();
+                int myX = (int) roomCorner.getX();
+                int myY = (int) roomCorner.getY();
 
-            int startingX = Math.min(myX, randomX);
-            int endingX = Math.max(myX, randomX);
-            int startingY = Math.min(myY, randomY);
-            int endingY = Math.max(myY, randomY);
+                int randomX = (int) randomPoint.getX();
+                int randomY = (int) randomPoint.getY();
 
-            for (int i = startingX; i < endingX; i++) {
-                for (int j = startingY; j < endingY; j++) {
-                    if(world[i][j].equals(Tileset.NOTHING)) {
-                            world[i][j] = Tileset.TREE;
+                int startingX = Math.min(myX, randomX);
+                int endingX = Math.max(myX, randomX);
+                int startingY = Math.min(myY, randomY);
+                int endingY = Math.max(myY, randomY);
+
+
+                for (int i = startingX; i < endingX; i++) {
+                    if (world[i][startingY].equals(Tileset.NOTHING)) {
+                        world[i][startingY] = Tileset.WATER;
                     }
-                    if(world[i][j].equals(Tileset.WALL)) {
-                        world[i][j] = Tileset.TREE;
-                        break;
+                }
+
+                for (int i = startingY; i < endingY; i++) {
+                    if (world[endingX][i].equals(Tileset.NOTHING)) {
+                        world[endingX][i] = Tileset.WATER;
                     }
                 }
             }
-
         }
+
     }
 
 
