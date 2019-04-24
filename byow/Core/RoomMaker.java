@@ -16,6 +16,8 @@ public class RoomMaker {
     private int height;
     private int seed;
     private TETile[][] world;
+
+
     private ArrayList<Point> roomPoints;
     private KDTree closestFinder;
     private Random seedRandom;
@@ -140,53 +142,33 @@ public class RoomMaker {
 
                 for (int i = startingY; i <= endingY; i++) {
                     changeTile(world, endingX, i, true);
+
                 }
             }
         }
     }
 
-    private void changeTile(TETile[][] world, int x, int y, boolean up) {
+    private void changeTile(TETile[][] thisWorld, int x, int y, boolean up) {
 
-        TETile currTile = world[x][y];
+        TETile currTile = thisWorld[x][y];
 
-        if (!currTile.equals(Tileset.WATER) || !currTile.equals(Tileset.WALL)) {
+        thisWorld[x][y] = Tileset.WATER;
 
-            world[x][y] = Tileset.WATER;
-
-            if (up) {
-                if (world[x - 1][y].equals(Tileset.NOTHING)) {
-                    world[x - 1][y] = Tileset.WALL;
-                }
-                if (world[x + 1][y].equals(Tileset.NOTHING)) {
-                    world[x + 1][y] = Tileset.WALL;
-                }
-            } else {
-                if (world[x][y - 1].equals(Tileset.NOTHING)) {
-                    world[x][y - 1] = Tileset.WALL;
-                }
-                if (world[x][y + 1].equals(Tileset.NOTHING)) {
-                    world[x][y + 1] = Tileset.WALL;
-                }
+        if (up) {
+            if (thisWorld[x - 1][y].equals(Tileset.NOTHING)) {
+                thisWorld[x - 1][y] = Tileset.WALL;
             }
-
-        }
-        /*else if (currTile].equals(Tileset.WALL)) {
-            if(up && !world[x][y+1].equals(Tileset.WALL)) {
-                world[x][y] = Tileset.WATER;
-            } else if (!up && !world[x+1][y].equals(Tileset.WALL)) {
-                world[x][y] = Tileset.WATER;
+            if (thisWorld[x + 1][y].equals(Tileset.NOTHING)) {
+                thisWorld[x + 1][y] = Tileset.WALL;
             }
-            return;
+        } else {
+            if (thisWorld[x][y - 1].equals(Tileset.NOTHING)) {
+                thisWorld[x][y - 1] = Tileset.WALL;
+            }
+            if (thisWorld[x][y + 1].equals(Tileset.NOTHING)) {
+                thisWorld[x][y + 1] = Tileset.WALL;
+            }
         }
-        */
 
     }
-
-
-
-
-
-
-
-
 }
