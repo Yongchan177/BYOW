@@ -16,7 +16,7 @@ public class RoomMaker {
     private int height;
     private int seed;
     private TETile[][] world;
-    private ArrayList<Point> roomCorners;
+    private ArrayList<Point> roomPoints;
     private KDTree closestFinder;
     private Random seedRandom;
 
@@ -30,7 +30,7 @@ public class RoomMaker {
         this.seed = seed;
         seedRandom = new Random(seed);
         world = new TETile[width][height];
-        roomCorners = new ArrayList<>();
+        roomPoints = new ArrayList<>();
 
         //Initializes all the tiles in the world
         for (int x = 0; x < width; x++) {
@@ -89,12 +89,12 @@ public class RoomMaker {
             if (isEmpty) {
                 for (int i = startingColumn; i < endingColumn; i++) {
                     for (int j = startingRow; j < endingRow; j++) {
-                        world[i][j] = Tileset.WATER;
-
                         //Building Walls Around The Room
                         if (i == startingColumn || i == endingColumn - 1
                                 || j == startingRow || j == endingRow - 1) {
                             world[i][j] = Tileset.WALL;
+                        } else {
+                            world[i][j] = Tileset.WATER;
                         }
                     }
                 }
@@ -105,7 +105,7 @@ public class RoomMaker {
                 int midY = startingRow + Math.floorDiv((endingRow - startingRow), 2);
 
                 Point midPoint = new Point((double) midX, (double) midY);
-                roomCorners.add(midPoint);
+                roomPoints.add(midPoint);
             }
         }
     }
@@ -114,16 +114,17 @@ public class RoomMaker {
     /** makeHallways: connects rooms together randomly using a KD tree's closest method */
     private void makeHallways() {
 
-        for (Point roomCorner : roomCorners) {
+        for (Point roomCorner : roomPoints) {
 
-            for(int k = 0; k < 3; k++) {
+            int noOfPaths = RandomUtils.uniform(seedRandom, 1, 5);
 
-                int random = RandomUtils.uniform(seedRandom, 0, roomCorners.size() - 1);
-                Point randomPoint = roomCorners.get(random);
+            for (int k = 0; k < noOfPaths; k++) {
+
+                int random = RandomUtils.uniform(seedRandom, 0, roomPoints.size() - 1);
+                Point randomPoint = roomPoints.get(random);
 
                 int myX = (int) roomCorner.getX();
                 int myY = (int) roomCorner.getY();
-
                 int randomX = (int) randomPoint.getX();
                 int randomY = (int) randomPoint.getY();
 
@@ -133,19 +134,51 @@ public class RoomMaker {
                 int endingY = Math.max(myY, randomY);
 
 
-                for (int i = startingX; i < endingX; i++) {
-                    if (world[i][startingY].equals(Tileset.NOTHING)) {
-                        world[i][startingY] = Tileset.WATER;
-                    }
+                for (int i = startingX; i <= endingX; i++) {
+                    changeTile(world, i, startingY, false);
                 }
 
-                for (int i = startingY; i < endingY; i++) {
-                    if (world[endingX][i].equals(Tileset.NOTHING)) {
-                        world[endingX][i] = Tileset.WATER;
-                    }
+                for (int i = startingY; i <= endingY; i++) {
+                    changeTile(world, endingX, i, true);
                 }
             }
         }
+    }
+
+    private void changeTile(TETile[][] world, int x, int y, boolean up) {
+
+        TETile currTile = world[x][y];
+
+        if (!currTile.equals(Tileset.WATER) || !currTile.equals(Tileset.WALL)) {
+
+            world[x][y] = Tileset.WATER;
+
+            if (up) {
+                if (world[x - 1][y].equals(Tileset.NOTHING)) {
+                    world[x - 1][y] = Tileset.WALL;
+                }
+                if (world[x + 1][y].equals(Tileset.NOTHING)) {
+                    world[x + 1][y] = Tileset.WALL;
+                }
+            } else {
+                if (world[x][y - 1].equals(Tileset.NOTHING)) {
+                    world[x][y - 1] = Tileset.WALL;
+                }
+                if (world[x][y + 1].equals(Tileset.NOTHING)) {
+                    world[x][y + 1] = Tileset.WALL;
+                }
+            }
+
+        }
+        /*else if (currTile].equals(Tileset.WALL)) {
+            if(up && !world[x][y+1].equals(Tileset.WALL)) {
+                world[x][y] = Tileset.WATER;
+            } else if (!up && !world[x+1][y].equals(Tileset.WALL)) {
+                world[x][y] = Tileset.WATER;
+            }
+            return;
+        }
+        */
 
     }
 

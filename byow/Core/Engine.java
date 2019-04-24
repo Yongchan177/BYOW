@@ -47,7 +47,7 @@ public class Engine {
         // that works for many different input types.
 
 
-        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, 1);
+        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, 678);
         TETile[][] finalWorldFrame = worldMaker.getWorld();
         return finalWorldFrame;
     }
