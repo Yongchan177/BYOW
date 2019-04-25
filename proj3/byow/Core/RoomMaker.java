@@ -135,13 +135,20 @@ public class RoomMaker {
                 int startingY = Math.min(myY, randomY);
                 int endingY = Math.max(myY, randomY);
 
+                boolean topRight = ((randomX > myX) && (randomY > myY))
+                        || ((myX > randomX) && (myY > randomY));
+
 
                 for (int i = startingX; i <= endingX; i++) {
                     changeTile(world, i, startingY, false);
                 }
 
                 for (int i = startingY; i <= endingY; i++) {
-                    changeTile(world, endingX, i, true);
+                    if (topRight) {
+                        changeTile(world, endingX, i, true);
+                    } else {
+                        changeTile(world, startingX, i, true);
+                    }
 
                 }
             }
