@@ -46,7 +46,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        int seed = 0;
+        long seed = 0;
         if (input.charAt(0) == 'N' || input.charAt(0) == 'n') {
             int i = 1;
             String seedString = "";
@@ -54,21 +54,17 @@ public class Engine {
                 seedString += input.charAt(i);
                 i++;
             }
-            seed = Integer.parseInt(seedString);
+            seed = Long.parseLong(seedString);
         }
 
-        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, seed);
+        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, (int) seed);
         TETile[][] finalWorldFrame = worldMaker.getWorld();
         return finalWorldFrame;
     }
 
-    public void renderWorld() {
-
-    }
-
     public static void main(String[] args) {
         Engine temp = new Engine();
-        TETile[][] world = temp.interactWithInputString("N69S");
+        TETile[][] world = temp.interactWithInputString("n455857754086099036s");
         temp.ter.initialize(WIDTH, HEIGHT);
         temp.ter.renderFrame(world);
     }
