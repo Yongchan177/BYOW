@@ -1,6 +1,5 @@
 package byow.Core;
 
-import byow.KdTree.KDTree;
 import byow.KdTree.Point;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
@@ -17,10 +16,18 @@ public class RoomMaker {
     private int seed;
     private TETile[][] world;
 
+    private int avatarX;
+    private int avatarY;
+    private int flowerX;
+    private int flowerY;
+    private int noOfMoves;
+    private int maxMoxes;
+    private int currScore;
+
 
     private ArrayList<Point> roomPoints;
-    private KDTree closestFinder;
     private Random seedRandom;
+    private Random seedRandomSeparate;
 
 
     /** Constructor: Initializes instance variables and instantiates 2D world Array. */
@@ -31,8 +38,13 @@ public class RoomMaker {
         this.height = height; //number of rows
         this.seed = seed;
         seedRandom = new Random(seed);
+        seedRandomSeparate = new Random(seed);
         world = new TETile[width][height];
         roomPoints = new ArrayList<>();
+        noOfMoves = 0;
+        currScore = 0;
+        flowerX = 0;
+        flowerY = 0;
 
         //Initializes all the tiles in the world
         for (int x = 0; x < width; x++) {
@@ -44,6 +56,10 @@ public class RoomMaker {
         //Create randomly generated rooms and hallways within the world
         makeRooms();
         makeHallways();
+        makeAvatar();
+        genFlower();
+
+        maxMoxes = RandomUtils.uniform(seedRandomSeparate, 10, 20);
     }
 
     /** getWorld: Returns world 2D Array */
@@ -96,7 +112,7 @@ public class RoomMaker {
                                 || j == startingRow || j == endingRow - 1) {
                             world[i][j] = Tileset.WALL;
                         } else {
-                            world[i][j] = Tileset.WATER;
+                            world[i][j] = Tileset.GRASS;
                         }
                     }
                 }
@@ -159,7 +175,7 @@ public class RoomMaker {
 
         TETile currTile = thisWorld[x][y];
 
-        thisWorld[x][y] = Tileset.WATER;
+        thisWorld[x][y] = Tileset.GRASS;
 
         if (up) {
             if (thisWorld[x - 1][y].equals(Tileset.NOTHING)) {
@@ -178,4 +194,103 @@ public class RoomMaker {
         }
 
     }
+
+    private int[] getPossibleXandY() {
+        int x = RandomUtils.uniform(seedRandomSeparate, 0, width);
+        int y = RandomUtils.uniform(seedRandomSeparate, 0, height);
+        while (!world[x][y].equals(Tileset.GRASS)) {
+            x = RandomUtils.uniform(seedRandomSeparate, 0, width);
+            y = RandomUtils.uniform(seedRandomSeparate, 0, height);
+        }
+        int[] position = new int[2];
+        position[0] = x;
+        position[1] = y;
+        return position;
+    }
+
+
+    private void makeAvatar() {
+        int[] avatarLocation = getPossibleXandY();
+        avatarX = avatarLocation[0];
+        avatarY = avatarLocation[1];
+        world[avatarX][avatarY] = Tileset.AVATAR;
+    }
+
+    private void genFlower() {
+        world[flowerX][flowerY] = Tileset.GRASS;
+        int[] flowerLocation = getPossibleXandY();
+        flowerX = flowerLocation[0];
+        flowerY = flowerLocation[1];
+        world[flowerX][flowerY] = Tileset.FLOWER;
+    }
+
+    public void controlAvatar(char input) {
+
+        if (input == 'W') {
+            if (!world[avatarX][avatarY + 1].equals(Tileset.WALL)) {
+                world[avatarX][avatarY + 1] = Tileset.AVATAR;
+                world[avatarX][avatarY] = Tileset.GRASS;
+                avatarY++;
+                noOfMoves++;
+            }
+        } else if (input == 'A') {
+            if (!world[avatarX - 1][avatarY].equals(Tileset.WALL)) {
+                world[avatarX - 1][avatarY] = Tileset.AVATAR;
+                world[avatarX][avatarY] = Tileset.GRASS;
+                avatarX--;
+                noOfMoves++;
+            }
+        } else if (input == 'S') {
+            if (!world[avatarX][avatarY - 1].equals(Tileset.WALL)) {
+                world[avatarX][avatarY - 1] = Tileset.AVATAR;
+                world[avatarX][avatarY] = Tileset.GRASS;
+                avatarY--;
+                noOfMoves++;
+            }
+        } else if (input == 'D') {
+            if (!world[avatarX + 1][avatarY].equals(Tileset.WALL)) {
+                world[avatarX + 1][avatarY] = Tileset.AVATAR;
+                world[avatarX][avatarY] = Tileset.GRASS;
+                avatarX++;
+                noOfMoves++;
+            }
+        } else if (input == 'R') {
+            rotateWorld();
+        }
+
+        if (world[avatarX][avatarY].equals(Tileset.FLOWER)) {
+            currScore++;
+        }
+
+        if (noOfMoves == maxMoxes) {
+            genFlower();
+            maxMoxes = RandomUtils.uniform(seedRandomSeparate, 10, 20);
+            noOfMoves = 0;
+        }
+
+    }
+
+    private void rotateWorld() {
+        TETile[][] tempArray = new TETile[world.length][world[0].length];
+        for (int i = 0; i < world[0].length; i++) {
+            for (int j = world.length - 1; j >= 0; j--) {
+                tempArray[i][j] = world[j][i];
+
+            }
+        }
+        world = tempArray;
+
+        int temp = height;
+        height  = width;
+        width = temp;
+
+        temp = avatarX;
+        avatarX = avatarY;
+        avatarY = temp;
+
+        temp = flowerX;
+        flowerX = flowerY;
+        flowerY = temp;
+    }
+
 }

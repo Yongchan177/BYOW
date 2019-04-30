@@ -14,7 +14,10 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        InputHandler handler = new InputHandler(WIDTH, HEIGHT, ter);
     }
+
+
 
     /**
      * Method used for autograding and testing your code. The input string will be a series
@@ -46,27 +49,19 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        long seed = 0;
-        if (input.charAt(0) == 'N' || input.charAt(0) == 'n') {
-            int i = 1;
-            String seedString = "";
-            while (input.charAt(i) != 'S' && input.charAt(i) != 's') {
-                seedString += input.charAt(i);
-                i++;
-            }
-            seed = Long.parseLong(seedString);
-        }
+        InputType forString = new InputType(false, input);
+        int seed = forString.getSeed();
 
-        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, (int) seed);
+        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, seed);
         TETile[][] finalWorldFrame = worldMaker.getWorld();
+
         return finalWorldFrame;
     }
 
     public static void main(String[] args) {
         Engine temp = new Engine();
-        TETile[][] world = temp.interactWithInputString("n455857754086099036s");
-        temp.ter.initialize(WIDTH, HEIGHT);
-        temp.ter.renderFrame(world);
+        temp.interactWithKeyboard();
+
     }
 
 
