@@ -24,10 +24,17 @@ public class RoomMaker {
     private int maxMoxes;
     private int currScore;
 
+    private boolean hardMode;
+
 
     private ArrayList<Point> roomPoints;
     private Random seedRandom;
     private Random seedRandomSeparate;
+
+
+    public int getScore() {
+        return currScore;
+    }
 
 
     /** Constructor: Initializes instance variables and instantiates 2D world Array. */
@@ -45,6 +52,7 @@ public class RoomMaker {
         currScore = 0;
         flowerX = 0;
         flowerY = 0;
+        hardMode = false;
 
         //Initializes all the tiles in the world
         for (int x = 0; x < width; x++) {
@@ -64,8 +72,29 @@ public class RoomMaker {
 
     /** getWorld: Returns world 2D Array */
     public TETile[][] getWorld() {
+        if (hardMode) {
+            return getDarkWorld();
+        }
         return world;
     }
+
+    public TETile[][] getDarkWorld() {
+        TETile[][] darkened = new TETile[world.length][world[0].length];
+        //Initializes darkened array
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                darkened[x][y] = Tileset.NOTHING;
+            }
+        }
+        System.arraycopy(world[avatarX], 0, darkened[avatarX], 0, world[avatarX].length);
+        for (int i = 0; i < width; i++) {
+            darkened[i][avatarY] = world[i][avatarY];
+        }
+
+        return darkened;
+    }
+
+
 
     /** makeRooms: uses random seed to generate rooms in the 2D world
      * Notes:
@@ -224,44 +253,45 @@ public class RoomMaker {
         world[flowerX][flowerY] = Tileset.FLOWER;
     }
 
-    public void controlAvatar(char input) {
 
-        if (input == 'W') {
-            if (!world[avatarX][avatarY + 1].equals(Tileset.WALL)) {
-                world[avatarX][avatarY + 1] = Tileset.AVATAR;
-                world[avatarX][avatarY] = Tileset.GRASS;
-                avatarY++;
-                noOfMoves++;
-            }
-        } else if (input == 'A') {
-            if (!world[avatarX - 1][avatarY].equals(Tileset.WALL)) {
-                world[avatarX - 1][avatarY] = Tileset.AVATAR;
-                world[avatarX][avatarY] = Tileset.GRASS;
-                avatarX--;
-                noOfMoves++;
-            }
-        } else if (input == 'S') {
-            if (!world[avatarX][avatarY - 1].equals(Tileset.WALL)) {
-                world[avatarX][avatarY - 1] = Tileset.AVATAR;
-                world[avatarX][avatarY] = Tileset.GRASS;
-                avatarY--;
-                noOfMoves++;
-            }
-        } else if (input == 'D') {
-            if (!world[avatarX + 1][avatarY].equals(Tileset.WALL)) {
-                world[avatarX + 1][avatarY] = Tileset.AVATAR;
-                world[avatarX][avatarY] = Tileset.GRASS;
-                avatarX++;
-                noOfMoves++;
-            }
-        } else if (input == 'R') {
-            rotateWorld();
-        }
-
-        if (world[avatarX][avatarY].equals(Tileset.FLOWER)) {
+    private void possibleSwitch(int xTo, int yTo) {
+        if (world[xTo][yTo].equals(Tileset.FLOWER)) {
+            genFlower();
             currScore++;
         }
+        if (!world[xTo][yTo].equals(Tileset.WALL)) {
+            world[xTo][yTo] = Tileset.AVATAR;
+            world[avatarX][avatarY] = Tileset.GRASS;
+            avatarX = xTo;
+            avatarY = yTo;
+            noOfMoves++;
+        }
+    }
 
+    public void controlAvatar(char input) {
+
+        switch (input) {
+            case 'W':
+                possibleSwitch(avatarX, avatarY + 1);
+                break;
+            case 'A':
+                possibleSwitch(avatarX - 1, avatarY);
+                break;
+            case 'S':
+                possibleSwitch(avatarX, avatarY - 1);
+                break;
+            case 'D':
+                possibleSwitch(avatarX + 1, avatarY);
+                break;
+            case 'R':
+                rotateWorld();
+                break;
+            case 'H':
+                hardMode = !hardMode;
+                break;
+            default:
+                break;
+        }
         if (noOfMoves == maxMoxes) {
             genFlower();
             maxMoxes = RandomUtils.uniform(seedRandomSeparate, 10, 20);

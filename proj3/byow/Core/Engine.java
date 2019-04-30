@@ -49,7 +49,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        InputType forString = new InputType(false, input);
+        InputType forString = new InputType(input);
         int seed = forString.getSeed();
 
         RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, seed);
@@ -61,7 +61,6 @@ public class Engine {
     public static void main(String[] args) {
         Engine temp = new Engine();
         temp.interactWithKeyboard();
-
     }
 
 
