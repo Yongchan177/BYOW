@@ -50,8 +50,6 @@ public class RoomMaker {
         roomPoints = new ArrayList<>();
         noOfMoves = 0;
         currScore = 0;
-        flowerX = 0;
-        flowerY = 0;
         hardMode = false;
 
         //Initializes all the tiles in the world
@@ -65,6 +63,10 @@ public class RoomMaker {
         makeRooms();
         makeHallways();
         makeAvatar();
+
+        int[] flowerInitial = getPossibleXandY();
+        flowerX = flowerInitial[0];
+        flowerY = flowerInitial[1];
         genFlower();
 
         maxMoxes = RandomUtils.uniform(seedRandomSeparate, 10, 20);
@@ -201,8 +203,6 @@ public class RoomMaker {
     }
 
     private void changeTile(TETile[][] thisWorld, int x, int y, boolean up) {
-
-        TETile currTile = thisWorld[x][y];
 
         thisWorld[x][y] = Tileset.GRASS;
 

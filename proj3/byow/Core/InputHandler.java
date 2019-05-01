@@ -42,6 +42,7 @@ public class InputHandler {
 
         header = new Font("Monaco", Font.BOLD, 30);
         subheader = new Font("Monaco", Font.BOLD, 15);
+
         StdDraw.setXscale(0, width);
         StdDraw.setYscale(0, height);
         StdDraw.clear(Color.BLACK);
@@ -98,15 +99,6 @@ public class InputHandler {
         }
     }
 
-    /**Validates Seeds: Checks for cases where a letter is inputted instead of a number*/
-    private void invalidSeed() {
-        StdDraw.clear(Color.BLACK);
-        StdDraw.setFont(subheader);
-        StdDraw.text(width / 2, height / 2, "Invalid Input, Please Try Again");
-        StdDraw.show();
-        StdDraw.pause(2000);
-        drawMenu();
-    }
 
     /**Seed Menu Maker: Displays the seed as users input it and checks for an ending S"*/
     private void seedMenu() {
@@ -121,13 +113,18 @@ public class InputHandler {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 input = java.lang.Character.toUpperCase(StdDraw.nextKeyTyped());
-                if (input == 'S') {
-                    seed = (int) Long.parseLong(seedString);
-                    beginGame();
-                    break;
-                }
-                if (input == 'B') {
-                    drawMenu();
+
+                switch (input) {
+                    case 'S':
+                        if (seedString.equals("")) {
+                            invalidSeed();
+                        }
+                        seed = (int) Long.parseLong(seedString);
+                        beginGame();
+                        break;
+                    case 'B':
+                        drawMenu();
+                        break;
                 }
 
                 try {
@@ -147,24 +144,15 @@ public class InputHandler {
         }
     }
 
-
-    private void loadGame() {
-
-        /*StringBuilder buildWorld = new StringBuilder();
-        try (Stream<String> stream = Files.lines(Paths.get("seed.txt"), StandardCharsets)
-
-
-        myRenderer.initialize(width, height);
-
-        renderGame();
-        */
+    /**Validates Seeds: Checks for cases where a letter is inputted instead of a number*/
+    private void invalidSeed() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setFont(subheader);
+        StdDraw.text(width / 2, height / 2, "Invalid Input, Please Try Again");
+        StdDraw.show();
+        StdDraw.pause(2000);
+        drawMenu();
     }
-
-    /**Quits the winodw*/
-    private void quitGame() {
-        System.exit(0);
-    }
-
 
     /**Keeps checking for user input and communicates with RoomMaker to move the avatar
      *  Also checks for a quit command in which case the progress would be saved
@@ -173,8 +161,33 @@ public class InputHandler {
         ourRoom = new RoomMaker(width, height, seed);
         myRenderer.initialize(width, height);
         renderGame();
-        String quitGame = "";
+        gameControl();
+    }
 
+    private void loadGame() {
+        String retrievedSeed = retrieveGame("seed");
+        String retrievedCommands = retrieveGame("allcommands");
+        seed = (int) Long.parseLong(retrievedSeed);
+        allCommands += retrievedCommands;
+
+        ourRoom = new RoomMaker(width, height, seed);
+        myRenderer.initialize(width, height);
+        renderGame();
+        for (int i = 0; i < retrievedCommands.length(); i++) {
+            ourRoom.controlAvatar(retrievedCommands.charAt(i));
+        }
+        renderGame();
+        gameControl();
+    }
+
+    /**Quits the window*/
+    private void quitGame() {
+        System.exit(0);
+    }
+
+
+    private void gameControl() {
+        String quitGame = "";
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char input = java.lang.Character.toUpperCase(StdDraw.nextKeyTyped());
@@ -202,12 +215,24 @@ public class InputHandler {
         }
     }
 
+
     /** Saves the seed and user commands to a text file*/
     private void saveFile(String toBeSaved, String fileName) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".txt"));
         writer.write(toBeSaved);
         writer.close();
     }
+
+    private String retrieveGame(String fileName) {
+        StringBuilder buildWorld = new StringBuilder();
+        try (Stream<String> stream = Files.lines(Paths.get(fileName + ".txt"), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> buildWorld.append(s));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return buildWorld.toString();
+    }
+
 
     /** Uses the renderer object to display the world and the HUD*/
     private void renderGame() {
