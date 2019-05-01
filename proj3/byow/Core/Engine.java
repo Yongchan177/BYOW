@@ -49,18 +49,15 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        InputType forString = new InputType(input);
-        int seed = forString.getSeed();
-
-        RoomMaker worldMaker = new RoomMaker(WIDTH, HEIGHT, seed);
-        TETile[][] finalWorldFrame = worldMaker.getWorld();
-
-        return finalWorldFrame;
+        StringHandler takeString = new StringHandler(input, WIDTH, HEIGHT);
+        return takeString.getRoom().getWorld();
     }
 
     public static void main(String[] args) {
         Engine temp = new Engine();
         temp.interactWithKeyboard();
+        //temp.ter.initialize(WIDTH, HEIGHT);
+        //temp.ter.renderFrame(temp.interactWithInputString("n7193300625454684331saaawasdaawdwsd"));
     }
 
 

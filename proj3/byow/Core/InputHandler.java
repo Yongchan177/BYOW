@@ -125,6 +125,8 @@ public class InputHandler {
                     case 'B':
                         drawMenu();
                         break;
+                    default:
+                        break;
                 }
 
                 try {
@@ -225,7 +227,8 @@ public class InputHandler {
 
     private String retrieveGame(String fileName) {
         StringBuilder buildWorld = new StringBuilder();
-        try (Stream<String> stream = Files.lines(Paths.get(fileName + ".txt"), StandardCharsets.UTF_8)) {
+        try (Stream<String> stream = Files.lines(Paths.get(fileName + ".txt"),
+                StandardCharsets.UTF_8)) {
             stream.forEach(s -> buildWorld.append(s));
         } catch (IOException e) {
             e.printStackTrace();
