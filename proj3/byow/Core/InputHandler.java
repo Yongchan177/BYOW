@@ -152,12 +152,12 @@ public class InputHandler {
         StdDraw.setFont(subheader);
         StdDraw.text(width / 2, height / 2, "Invalid Input, Please Try Again");
         StdDraw.show();
-        StdDraw.pause(2000);
+        StdDraw.pause(1000);
         drawMenu();
     }
 
-    /**Keeps checking for user input and communicates with RoomMaker to move the avatar
-     *  Also checks for a quit command in which case the progress would be saved
+    /**Creates the room, initializes the renderer, renders the game
+     * and then hands over to the controller function
      */
     private void beginGame() {
         ourRoom = new RoomMaker(width, height, seed);
@@ -166,6 +166,9 @@ public class InputHandler {
         gameControl();
     }
 
+    /**Retrieves a previously saved game and gets the world to that stage
+     * Then hands over to the controller function
+     */
     private void loadGame() {
         String retrievedSeed = retrieveGame("seed");
         String retrievedCommands = retrieveGame("allcommands");
@@ -187,15 +190,15 @@ public class InputHandler {
         System.exit(0);
     }
 
-
+    /**Handles the user input while playing the game. Handles a quit command*/
     private void gameControl() {
         String quitGame = "";
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char input = java.lang.Character.toUpperCase(StdDraw.nextKeyTyped());
-                if (input == ':') {
+                if (input == ':' && quitGame.equals("")) {
                     quitGame += input;
-                } else if (input == 'Q') {
+                } else if (input == 'Q' && quitGame.equals(":")) {
                     quitGame += input;
                 } else {
                     allCommands += input;
@@ -212,7 +215,6 @@ public class InputHandler {
                 } catch (IOException e) {
                     System.out.println("me fail");
                 }
-
             }
         }
     }
@@ -225,13 +227,14 @@ public class InputHandler {
         writer.close();
     }
 
+    /** Retrieves the previously saved text files*/
     private String retrieveGame(String fileName) {
         StringBuilder buildWorld = new StringBuilder();
         try (Stream<String> stream = Files.lines(Paths.get(fileName + ".txt"),
                 StandardCharsets.UTF_8)) {
             stream.forEach(s -> buildWorld.append(s));
         } catch (IOException e) {
-            e.printStackTrace();
+            quitGame();
         }
         return buildWorld.toString();
     }
@@ -240,9 +243,11 @@ public class InputHandler {
     /** Uses the renderer object to display the world and the HUD*/
     private void renderGame() {
         StdDraw.setPenColor(Color.WHITE);
+        //Heads Up Display:
         StdDraw.text(width / 10, 19 * height / 20, "Tile: " + tileUnderMouse());
         StdDraw.text(width - width / 10, 19 * height / 20, "Score: " + ourRoom.getScore());
         StdDraw.show();
+        //Actual Gameboard:
         myRenderer.renderFrame(ourRoom.getWorld());
     }
 
@@ -250,7 +255,12 @@ public class InputHandler {
     private String tileUnderMouse() {
         int mouseX = (int) StdDraw.mouseX();
         int mouseY = (int) StdDraw.mouseY();
-        TETile curr = ourRoom.getWorld()[mouseX][mouseY];
-        return curr.description();
+        try {
+            TETile curr = ourRoom.getWorld()[mouseX][mouseY];
+            return curr.description();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "N/A";
+            //This happens when the user keeps the mouse over the window's header
+        }
     }
 }

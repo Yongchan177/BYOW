@@ -32,10 +32,6 @@ public class RoomMaker {
     private Random seedRandomSeparate;
 
 
-    public int getScore() {
-        return currScore;
-    }
-
 
     /** Constructor: Initializes instance variables and instantiates 2D world Array. */
     public RoomMaker(int width, int height, int seed) {
@@ -80,6 +76,9 @@ public class RoomMaker {
         return world;
     }
 
+    /** Creates a copy of the world array where only what's
+     * in the line of site can be seen
+     */
     public TETile[][] getDarkWorld() {
         TETile[][] darkened = new TETile[world.length][world[0].length];
         //Initializes darkened array
@@ -202,6 +201,7 @@ public class RoomMaker {
         }
     }
 
+    /** Helper method for creating walls around the hallways as they're built*/
     private void changeTile(TETile[][] thisWorld, int x, int y, boolean up) {
 
         thisWorld[x][y] = Tileset.GRASS;
@@ -224,6 +224,7 @@ public class RoomMaker {
 
     }
 
+    /**Finds a random X and Y that's inside a room or hallway*/
     private int[] getPossibleXandY() {
         int x = RandomUtils.uniform(seedRandomSeparate, 0, width);
         int y = RandomUtils.uniform(seedRandomSeparate, 0, height);
@@ -237,7 +238,7 @@ public class RoomMaker {
         return position;
     }
 
-
+    /**Creates the avatar at the beginning of the game*/
     private void makeAvatar() {
         int[] avatarLocation = getPossibleXandY();
         avatarX = avatarLocation[0];
@@ -245,6 +246,7 @@ public class RoomMaker {
         world[avatarX][avatarY] = Tileset.AVATAR;
     }
 
+    /**Generates a flower at a random possible location*/
     private void genFlower() {
         world[flowerX][flowerY] = Tileset.GRASS;
         int[] flowerLocation = getPossibleXandY();
@@ -254,22 +256,8 @@ public class RoomMaker {
     }
 
 
-    private void possibleSwitch(int xTo, int yTo) {
-        if (world[xTo][yTo].equals(Tileset.FLOWER)) {
-            genFlower();
-            currScore++;
-        }
-        if (!world[xTo][yTo].equals(Tileset.WALL)) {
-            world[xTo][yTo] = Tileset.AVATAR;
-            world[avatarX][avatarY] = Tileset.GRASS;
-            avatarX = xTo;
-            avatarY = yTo;
-            noOfMoves++;
-        }
-    }
-
+    /**Takes in the user's input and controls the avatar accordingly*/
     public void controlAvatar(char input) {
-
         switch (input) {
             case 'W':
                 possibleSwitch(avatarX, avatarY + 1);
@@ -300,12 +288,27 @@ public class RoomMaker {
 
     }
 
+    /**Helper method for moving the avatar around*/
+    private void possibleSwitch(int xTo, int yTo) {
+        if (world[xTo][yTo].equals(Tileset.FLOWER)) {
+            genFlower();
+            currScore++;
+        }
+        if (!world[xTo][yTo].equals(Tileset.WALL)) {
+            world[xTo][yTo] = Tileset.AVATAR;
+            world[avatarX][avatarY] = Tileset.GRASS;
+            avatarX = xTo;
+            avatarY = yTo;
+            noOfMoves++;
+        }
+    }
+
+    /**Creates a new world array that has all elements rotated*/
     private void rotateWorld() {
         TETile[][] tempArray = new TETile[world.length][world[0].length];
         for (int i = 0; i < world[0].length; i++) {
             for (int j = world.length - 1; j >= 0; j--) {
                 tempArray[i][j] = world[j][i];
-
             }
         }
         world = tempArray;
@@ -323,4 +326,8 @@ public class RoomMaker {
         flowerY = temp;
     }
 
+    /**Returns the Player's Score*/
+    public int getScore() {
+        return currScore;
+    }
 }

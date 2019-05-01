@@ -17,8 +17,6 @@ public class Engine {
         InputHandler handler = new InputHandler(WIDTH, HEIGHT, ter);
     }
 
-
-
     /**
      * Method used for autograding and testing your code. The input string will be a series
      * of characters (for example, "n123sswwdasdassadwas", "n123sss:q", "lwww". The engine should
@@ -55,9 +53,11 @@ public class Engine {
 
     public static void main(String[] args) {
         Engine temp = new Engine();
-        temp.interactWithKeyboard();
         //temp.ter.initialize(WIDTH, HEIGHT);
         //temp.ter.renderFrame(temp.interactWithInputString("n7193300625454684331saaawasdaawdwsd"));
+
+        temp.interactWithKeyboard();
+
     }
 
 
