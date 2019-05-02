@@ -1,41 +1,36 @@
 package byow.Core;
 
+import byow.TileEngine.TERenderer;
+
 public class StringHandler {
 
-    private int seed;
     private String input;
-    private int width;
-    private int height;
-    private RoomMaker myRoom;
+    private InputHandler handleInput;
 
-    public StringHandler(String inputString, int width, int height) {
+    public StringHandler(String inputString, int width, int height, TERenderer myRenderer) {
         input = inputString;
-        this.width = width;
-        this.height = height;
+        handleInput = new InputHandler(width, height, myRenderer, false);
         processInput();
     }
 
-
     private void processInput() {
         input = input.toUpperCase();
-        String seedString = "";
+        handleInput.handleMenuOptions(input.charAt(0));
         int i = 1;
         if (input.charAt(0) == 'N') {
             while (input.charAt(i) != 'S') {
-                seedString += input.charAt(i);
+                handleInput.seedMenuHandler(input.charAt(i));
                 i++;
             }
-            seed = (int) Long.parseLong(seedString);
+            handleInput.seedMenuHandler(input.charAt(i));
             i++;
         }
-        myRoom = new RoomMaker(width, height, seed);
         for (int j = i; j < input.length(); j++) {
-            myRoom.controlAvatar(input.charAt(j));
+            handleInput.gameControlHandler(input.charAt(j));
         }
     }
 
     public RoomMaker getRoom() {
-        return myRoom;
+        return handleInput.getRoom();
     }
-
 }

@@ -14,7 +14,7 @@ public class Engine {
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
-        InputHandler handler = new InputHandler(WIDTH, HEIGHT, ter);
+        InputHandler handler = new InputHandler(WIDTH, HEIGHT, ter, true);
     }
 
     /**
@@ -47,17 +47,19 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        StringHandler takeString = new StringHandler(input, WIDTH, HEIGHT);
+        StringHandler takeString = new StringHandler(input, WIDTH, HEIGHT, ter);
         return takeString.getRoom().getWorld();
     }
 
     public static void main(String[] args) {
         Engine temp = new Engine();
+
         //temp.ter.initialize(WIDTH, HEIGHT);
-        //temp.ter.renderFrame(temp.interactWithInputString("n7193300625454684331saaawasdaawdwsd"));
+        //temp.interactWithInputString("n7193300625454684331saaawasdaawd:q");
+        //TETile[][] world = temp.interactWithInputString("lwsd");
+        //temp.ter.renderFrame(world);
 
-        temp.interactWithKeyboard();
-
+        //temp.interactWithKeyboard();
     }
 
 
