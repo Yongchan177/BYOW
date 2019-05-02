@@ -54,13 +54,12 @@ public class InputHandler {
         header = new Font("Monaco", Font.BOLD, 30);
         subheader = new Font("Monaco", Font.BOLD, 15);
 
-        StdDraw.setXscale(0, width);
-        StdDraw.setYscale(0, height);
-        StdDraw.clear(Color.BLACK);
-        StdDraw.enableDoubleBuffering();
-        StdDraw.setPenColor(Color.WHITE);
-
         if (keyboardUsed) {
+            StdDraw.setXscale(0, width);
+            StdDraw.setYscale(0, height);
+            StdDraw.clear(Color.BLACK);
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.WHITE);
             drawMenu();
         }
     }
