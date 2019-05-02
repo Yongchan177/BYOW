@@ -29,13 +29,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/proj3/byow/Core/InputHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="310">
-              <caret line="295" column="42" selection-start-line="295" selection-start-column="42" selection-end-line="295" selection-end-column="42" />
+            <state relative-caret-position="343">
+              <caret line="249" column="17" selection-start-line="249" selection-start-column="17" selection-end-line="249" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#899#900#0" expanded="true" />
                 <element signature="e#920#921#0" expanded="true" />
-                <element signature="e#6499#6500#0" expanded="true" />
+                <element signature="e#6491#6492#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -153,7 +153,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556759894032" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556759999840" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunDashboard">
@@ -399,13 +399,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/proj3/byow/Core/InputHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="295" column="42" selection-start-line="295" selection-start-column="42" selection-end-line="295" selection-end-column="42" />
+        <state relative-caret-position="343">
+          <caret line="249" column="17" selection-start-line="249" selection-start-column="17" selection-end-line="249" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#899#900#0" expanded="true" />
             <element signature="e#920#921#0" expanded="true" />
-            <element signature="e#6499#6500#0" expanded="true" />
+            <element signature="e#6491#6492#0" expanded="true" />
           </folding>
         </state>
       </provider>

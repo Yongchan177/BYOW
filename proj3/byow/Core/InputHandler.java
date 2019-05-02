@@ -245,7 +245,9 @@ public class InputHandler {
             try {
                 saveFile(allCommands, "allcommands");
                 saveFile(seed + "", "seed");
-                quitGame();
+                if (keyboardUsed) {
+                    quitGame();
+                }
             } catch (IOException e) {
                 System.out.println("me fail");
             }
