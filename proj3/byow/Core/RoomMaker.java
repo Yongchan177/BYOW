@@ -111,7 +111,12 @@ public class RoomMaker {
      *      1. Unique seeds must return unique rooms
      *      2. Identical seeds must return the same rooms */
     private void makeRooms() {
-        noOfRooms = RandomUtils.uniform(seedRandom, 5, 15);
+        if (!avengersVictory) {
+            noOfRooms = RandomUtils.uniform(seedRandom, 5, 15);
+        } else {
+            noOfRooms = noOfRooms / 2;
+        }
+
         int k = 0;
 
         while (k < noOfRooms) {
