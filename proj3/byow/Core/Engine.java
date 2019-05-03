@@ -59,7 +59,7 @@ public class Engine {
         //TETile[][] world = temp.interactWithInputString("lwsd");
         //temp.ter.renderFrame(world);
 
-        //temp.interactWithKeyboard();
+        temp.interactWithKeyboard();
     }
 
 

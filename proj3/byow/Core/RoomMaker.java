@@ -15,15 +15,19 @@ public class RoomMaker {
     private int height;
     private int seed;
     private TETile[][] world;
+    private int noOfRooms;
 
     private int avatarX;
     private int avatarY;
     private int flowerX;
     private int flowerY;
+    private TETile currStone;
+    private TETile currAvatar;
     private int noOfMoves;
     private int maxMoxes;
     private int currScore;
 
+    private boolean avengersVictory;
     private boolean hardMode;
 
 
@@ -47,22 +51,21 @@ public class RoomMaker {
         noOfMoves = 0;
         currScore = 0;
         hardMode = false;
+        avengersVictory = false;
 
         //Initializes all the tiles in the world
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                world[x][y] = Tileset.NOTHING;
-            }
-        }
+        setAllTiles(Tileset.NOTHING, world);
 
         //Create randomly generated rooms and hallways within the world
         makeRooms();
         makeHallways();
+        currAvatar = Tileset.IRONMAN;
         makeAvatar();
 
         int[] flowerInitial = getPossibleXandY();
         flowerX = flowerInitial[0];
         flowerY = flowerInitial[1];
+        currStone = Tileset.POWERSTONE;
         genFlower();
 
         maxMoxes = RandomUtils.uniform(seedRandomSeparate, 10, 20);
@@ -76,17 +79,23 @@ public class RoomMaker {
         return world;
     }
 
+
+    private void setAllTiles(TETile tile, TETile[][] currWorld) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                currWorld[x][y] = tile;
+            }
+        }
+    }
+
+
     /** Creates a copy of the world array where only what's
      * in the line of site can be seen
      */
     public TETile[][] getDarkWorld() {
         TETile[][] darkened = new TETile[world.length][world[0].length];
         //Initializes darkened array
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                darkened[x][y] = Tileset.NOTHING;
-            }
-        }
+        setAllTiles(Tileset.NOTHING, darkened);
         System.arraycopy(world[avatarX], 0, darkened[avatarX], 0, world[avatarX].length);
         for (int i = 0; i < width; i++) {
             darkened[i][avatarY] = world[i][avatarY];
@@ -102,7 +111,7 @@ public class RoomMaker {
      *      1. Unique seeds must return unique rooms
      *      2. Identical seeds must return the same rooms */
     private void makeRooms() {
-        int noOfRooms = RandomUtils.uniform(seedRandom, 5, 15);
+        noOfRooms = RandomUtils.uniform(seedRandom, 5, 15);
         int k = 0;
 
         while (k < noOfRooms) {
@@ -243,7 +252,7 @@ public class RoomMaker {
         int[] avatarLocation = getPossibleXandY();
         avatarX = avatarLocation[0];
         avatarY = avatarLocation[1];
-        world[avatarX][avatarY] = Tileset.AVATAR;
+        world[avatarX][avatarY] = currAvatar;
     }
 
     /**Generates a flower at a random possible location*/
@@ -252,7 +261,7 @@ public class RoomMaker {
         int[] flowerLocation = getPossibleXandY();
         flowerX = flowerLocation[0];
         flowerY = flowerLocation[1];
-        world[flowerX][flowerY] = Tileset.FLOWER;
+        world[flowerX][flowerY] = currStone;
     }
 
 
@@ -290,12 +299,38 @@ public class RoomMaker {
 
     /**Helper method for moving the avatar around*/
     private void possibleSwitch(int xTo, int yTo) {
-        if (world[xTo][yTo].equals(Tileset.FLOWER)) {
-            genFlower();
+        if (world[xTo][yTo].equals(currStone)) {
             currScore++;
+            switch (currScore) {
+                case 1:
+                    currStone = Tileset.SPACESTONE;
+                    break;
+                case 2:
+                    currStone = Tileset.REALITYSTONE;
+                    break;
+                case 3:
+                    currStone = Tileset.SOULSTONE;
+                    break;
+                case 4:
+                    currStone = Tileset.TIMESTONE;
+                    break;
+                case 5:
+                    currStone = Tileset.MINDSTONE;
+                    break;
+                case 6:
+                    avengersVictory = true;
+                    makeRooms();
+                    makeHallways();
+                    currStone = Tileset.HEART;
+                    currAvatar = Tileset.HULK;
+                    break;
+                default:
+                    break;
+            }
+            genFlower();
         }
         if (!world[xTo][yTo].equals(Tileset.WALL)) {
-            world[xTo][yTo] = Tileset.AVATAR;
+            world[xTo][yTo] = currAvatar;
             world[avatarX][avatarY] = Tileset.GRASS;
             avatarX = xTo;
             avatarY = yTo;

@@ -33,7 +33,14 @@ public class InputHandler {
     private String allCommands;
     private String seedString;
     private String quitGame;
-
+    private String[] banners = {"Collect all Infinity Stones and bring back the Avengers!",
+            "Travel to 1970 to get the Space Stone!",
+            "Jane Foster has the Reality Stone",
+            "Hawkeye or Blackwidow? The Soul Stone needs a sacrifice...",
+            "Persuade the Ancient One for the Time Stone",
+            "Just one more stone needed...",
+            "You have defeated the Evil Titan and Brought Back the Other Half!",
+            "Proof that Tony Stark has a heart...RIP"};
     private boolean keyboardUsed;
 
     public RoomMaker getRoom() {
@@ -281,6 +288,11 @@ public class InputHandler {
         //Heads Up Display:
         StdDraw.text(width / 10, 19 * height / 20, "Tile: " + tileUnderMouse());
         StdDraw.text(width - width / 10, 19 * height / 20, "Score: " + ourRoom.getScore());
+        if (ourRoom.getScore() <= 6) {
+            StdDraw.text(width / 2, 19 * height / 20, banners[ourRoom.getScore()]);
+        } else {
+            StdDraw.text(width / 2, 19 * height / 20, banners[7]);
+        }
         StdDraw.show();
         //Actual Gameboard:
         myRenderer.renderFrame(ourRoom.getWorld());

@@ -33,6 +33,22 @@ public class Tileset {
     public static final TETile SAND = new TETile('▒', Color.yellow, Color.black, "sand");
     public static final TETile MOUNTAIN = new TETile('▲', Color.gray, Color.black, "mountain");
     public static final TETile TREE = new TETile('♠', Color.green, Color.black, "tree");
+
+
+    //Infinity Stones:
+    public static final TETile POWERSTONE = new TETile('◉', Color.magenta, Color.black, "Power Stone");
+    public static final TETile SPACESTONE = new TETile('◉', Color.blue, Color.black, "Space Stone");
+    public static final TETile REALITYSTONE = new TETile('◉', Color.red, Color.black, "Reality Stone");
+    public static final TETile SOULSTONE = new TETile('◉', Color.orange, Color.black, "Soul Stone");
+    public static final TETile TIMESTONE = new TETile('◉', Color.green, Color.black, "Time Stone");
+    public static final TETile MINDSTONE = new TETile('◉', Color.yellow, Color.black, "Mind Stone");
+
+    public static final TETile IRONMAN = new TETile('♛', Color.red, Color.getHSBColor(51, 100, 100), "Ironman");
+    public static final TETile HEART = new TETile('❤', Color.red, Color.black, "Tony's Heart");
+    public static final TETile HULK = new TETile('☃', Color.green, Color.black, "Hulk");
+
+
+
 }
 
 
